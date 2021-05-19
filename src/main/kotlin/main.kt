@@ -1,57 +1,47 @@
 import java.awt.Color
 import java.awt.Graphics
+import java.awt.Toolkit
 import java.awt.image.BufferedImage
-import javax.swing.*
+import javax.swing.ImageIcon
+import javax.swing.JFrame
+import javax.swing.JLabel
 
+val ventana =JFrame("Graficos")
+val icono1= ImageIcon("src/main/resources/googleSingIn.png")
+val icono2= ImageIcon("src/main/resources/Captura.PNG")
 
-fun main(args: Array<String>) {
+fun main() {
 
-    val principal =JFrame("Prueba")
-    val icono= ImageIcon("C:\\Users\\m1840\\Pictures\\googleSingIn.png")
+    val screenSize = Toolkit.getDefaultToolkit().screenSize
+    val width = screenSize.width
+    val height = screenSize.height
 
-    principal.defaultCloseOperation=JFrame.EXIT_ON_CLOSE
-    principal.setSize(420, 380)
+    ventana.defaultCloseOperation=JFrame.EXIT_ON_CLOSE
+    ventana.setSize(width, height)
 
-    val width = 640
-    val height = 480
-    val bbs = BasicBitmapStorage(width, height)
-    with (bbs) {
-        fill(Color.cyan)
-        setPixel(width / 2, height / 2, Color.black)
-        val c1 = getPixel(width / 2, height / 2)
-        val c2 = getPixel(20, 20)
-        print("The color of the pixel at (${width / 2}, ${height / 2}) is ")
-        println(if (c1 == Color.black) "black" else "unknown")
-        print("The color of the pixel at (120, 120) is ")
-        println(if (c2 == Color.cyan) "cyan" else "unknown")
+    val posicionI2X=32
+    val posicionI2Y=64
+
+    val imagen1=iconToBufferedImage(icono1)
+    val imagen2=iconToBufferedImage(icono2)
+
+    for (x in 0 until imagen2.width) {
+        for (y in 0 until imagen2.height){
+
+            setPixel(x+posicionI2X, y+posicionI2Y, getPixel(x,y,imagen2), imagen1)
+        }
     }
-
-    var bufferedImage=IconToBufferedImage(icono)
-    principal.add(JLabel(ImageIcon(bufferedImage)))
-    principal.isVisible = true
+    ventana.add(JLabel(ImageIcon(imagen1)))
+    ventana.isVisible = true
 }
 
-class BasicBitmapStorage(width: Int, height: Int) {
-    val image = BufferedImage(width, height, BufferedImage.TYPE_3BYTE_BGR)
+fun setPixel(x: Int, y: Int, c: Color,imagen:BufferedImage) = imagen.setRGB(x, y, c.rgb)
 
-    fun fill(c: Color) {
-        val g = image.graphics
-        g.color = c
-        g.fillRect(0, 0, image.width, image.height)
-    }
+fun getPixel(x: Int, y: Int,imagen: BufferedImage) = Color(imagen.getRGB(x, y))
 
+fun iconToBufferedImage(icon :ImageIcon):BufferedImage{
 
-    fun setPixel(x: Int, y: Int, c: Color) = image.setRGB(x, y, c.getRGB())
-
-    fun getPixel(x: Int, y: Int) = Color(image.getRGB(x, y))
-}
-fun IconToBufferedImage(icon :ImageIcon):BufferedImage{
-
-    val bi = BufferedImage(
-        icon.getIconWidth(),
-        icon.getIconHeight(),
-        BufferedImage.TYPE_INT_RGB
-    )
+    val bi = BufferedImage(icon.iconWidth,icon.iconHeight,BufferedImage.TYPE_INT_RGB)
     val g: Graphics = bi.createGraphics()
 
     icon.paintIcon(null, g, 0, 0)
@@ -59,3 +49,12 @@ fun IconToBufferedImage(icon :ImageIcon):BufferedImage{
 
     return bi
 }
+/*
+ fun fill(c: Color) {
+        val g = image.graphics
+        g.color = c
+        g.fillRect(0, 0, image.width, image.height)
+    }
+
+
+ */
