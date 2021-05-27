@@ -9,7 +9,7 @@ import javax.swing.JLabel
 val ventana =JFrame("Graficos")
 val icono1= ImageIcon("src/main/resources/googleSingIn.png")
 val icono2= ImageIcon("src/main/resources/Captura.PNG")
-
+var label =JLabel()
 fun main() {
 
     val screenSize = Toolkit.getDefaultToolkit().screenSize
@@ -19,11 +19,13 @@ fun main() {
     ventana.defaultCloseOperation=JFrame.EXIT_ON_CLOSE
     ventana.setSize(width, height)
 
-    val posicionI2X=32
-    val posicionI2Y=64
+    var posicionI2X=32
+    var posicionI2Y=64
 
     val imagen1=iconToBufferedImage(icono1)
     val imagen2=iconToBufferedImage(icono2)
+
+    while (true){
 
     for (x in 0 until imagen2.width) {
         for (y in 0 until imagen2.height){
@@ -31,8 +33,14 @@ fun main() {
             setPixel(x+posicionI2X, y+posicionI2Y, getPixel(x,y,imagen2), imagen1)
         }
     }
-    ventana.add(JLabel(ImageIcon(imagen1)))
+
+    label= JLabel(ImageIcon(imagen1))
+        ventana.remove(label)
+    ventana.add(label)
     ventana.isVisible = true
+        posicionI2X++
+        println(posicionI2X)
+    }
 }
 
 fun setPixel(x: Int, y: Int, c: Color,imagen:BufferedImage) = imagen.setRGB(x, y, c.rgb)
