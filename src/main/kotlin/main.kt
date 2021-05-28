@@ -1,5 +1,6 @@
 import java.awt.Color
 import java.awt.Graphics
+import java.awt.Image
 import java.awt.Toolkit
 import java.awt.image.BufferedImage
 import javax.swing.ImageIcon
@@ -7,14 +8,17 @@ import javax.swing.JFrame
 import javax.swing.JLabel
 
 val ventana =JFrame("Graficos")
-val icono1= ImageIcon("src/main/resources/googleSingIn.png")
 val icono2= ImageIcon("src/main/resources/Captura.PNG")
-var label =JLabel()
-fun main() {
+var icono1=  ImageIcon("src/main/resources/googleSingIn.png")
 
-    val screenSize = Toolkit.getDefaultToolkit().screenSize
-    val width = screenSize.width
-    val height = screenSize.height
+val graficos:Graficos=Graficos()
+
+var label =JLabel()
+
+val screenSize = Toolkit.getDefaultToolkit().screenSize
+val width = screenSize.width
+val height = screenSize.height
+fun main() {
 
     ventana.defaultCloseOperation=JFrame.EXIT_ON_CLOSE
     ventana.setSize(width, height)
@@ -22,41 +26,25 @@ fun main() {
     var posicionI2X=32
     var posicionI2Y=64
 
-    val imagen1=iconToBufferedImage(icono1)
-    val imagen2=iconToBufferedImage(icono2)
-
     while (true){
 
-    for (x in 0 until imagen2.width) {
-        for (y in 0 until imagen2.height){
+        imagenFinal=icono1
+    imagenFinal=graficos.dibujar(imagenFinal,icono2,posicionI2X,posicionI2Y)
 
-            setPixel(x+posicionI2X, y+posicionI2Y, getPixel(x,y,imagen2), imagen1)
-        }
-    }
 
-    label= JLabel(ImageIcon(imagen1))
-        ventana.remove(label)
+    ventana.remove(label)
+    label= JLabel(imagenFinal)
     ventana.add(label)
-    ventana.isVisible = true
+    ventana.isVisible=true
+
+
         posicionI2X++
-        println(posicionI2X)
+
+        println("($posicionI2X, $posicionI2Y)")
     }
 }
 
-fun setPixel(x: Int, y: Int, c: Color,imagen:BufferedImage) = imagen.setRGB(x, y, c.rgb)
 
-fun getPixel(x: Int, y: Int,imagen: BufferedImage) = Color(imagen.getRGB(x, y))
-
-fun iconToBufferedImage(icon :ImageIcon):BufferedImage{
-
-    val bi = BufferedImage(icon.iconWidth,icon.iconHeight,BufferedImage.TYPE_INT_RGB)
-    val g: Graphics = bi.createGraphics()
-
-    icon.paintIcon(null, g, 0, 0)
-    g.dispose()
-
-    return bi
-}
 /*
  fun fill(c: Color) {
         val g = image.graphics
